@@ -138,7 +138,7 @@ static void print_usage(char *prg)
 	fprintf(stderr, "         -b <count>  (similar to '-l', but using a ring buffer file of at most <count> CAN frames)\n");
 	fprintf(stderr, "         -B <size>   (similar to '-b', but maintain a maximum file size in bytes)\n");
 	fprintf(stderr, "         -L          (use log file format on stdout)\n");
-	fprintf(stderr, "         -n <count>  (terminate after reception of <count> CAN frames)\n");
+	fprintf(stderr, "         -n <count>  (terminate after reception of <count> CAN frames - defaults to 100, set to 0 for unlimited)\n");
 	fprintf(stderr, "         -r <size>   (set socket receive buffer to <size>)\n");
 	fprintf(stderr, "         -D          (Don't exit if a \"detected\" can device goes down.\n");
 	fprintf(stderr, "         -d          (monitor dropped CAN frames)\n");
@@ -297,7 +297,7 @@ int main(int argc, char **argv)
 	unsigned char view = 0;
 	unsigned char log = 0;
 	unsigned char logfrmt = 0;
-	int count = 0;
+	int count = 100;
 	int rcvbuf_size = 0;
 	int opt, num_events;
 	int currmax, numfilter;
@@ -410,7 +410,7 @@ int main(int argc, char **argv)
 
 		case 'n':
 			count = atoi(optarg);
-			if (count < 1) {
+			if (count < 0) {
 				print_usage(basename(argv[0]));
 				exit(1);
 			}
